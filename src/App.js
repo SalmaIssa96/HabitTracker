@@ -1,12 +1,11 @@
 import Week from './components/Week';
-import { AppBar, Box, Button, Toolbar, Typography } from '@mui/material';
+import { AppBar, Box, Button, FormControl, TextField, Toolbar, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { makeStyles } from 'tss-react/mui';
-
+import AddIcon from '@mui/icons-material/Add';
 
 const useStyles = makeStyles()(() => {
   return {
-
     appHeader: {
       minHight: '100vh',
       display: 'flex',
@@ -37,6 +36,20 @@ const useStyles = makeStyles()(() => {
     weekTile: {
       writingMode: 'vertical-lr'
     },
+    addTaskForm: {
+      width: '50%',
+      paddingTop: '20px',
+      display: 'flex',
+      flexDirection: 'row',
+
+    },
+    addBtn: {
+      position: 'absolute',
+      right: '0px',
+      height: '-webkit-fill-available',
+      width: '100px',
+      background: 'teal'
+    }
 
   }
 });
@@ -79,6 +92,7 @@ const users = ['Salma', 'Ibraheem'];
 function App() {
   const [value, setValue] = useState(0);
   const [weeksData, setWeeksData] = useState(Array.from({ length: 11 }, () => initialWeekData));
+  const [task, setTask] = useState('')
   const { classes } = useStyles();
 
 
@@ -110,13 +124,29 @@ function App() {
     setWeeksData(newData);
     localStorage.setItem(users[value], JSON.stringify(newData));
   };
+
+  const handleAddTask = () => {
+    if (!task.trim()) return;
+
+    const newTask = {
+      id: weeksData[0].length + 1,
+      name: task,
+      days: [false, false, false, false, false, false, false],
+    };
+
+    const newData = weeksData.map(week => [...week, newTask]);
+
+    setWeeksData(newData);
+    localStorage.setItem(users[value], JSON.stringify(newData));
+    setTask('');
+  };
   return (
     <div >
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static">
           <Toolbar className={classes.navbar}>
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              75 Hard Challenge
+              Habit Tracker
             </Typography>
             {users.map((user, index) => (
               <Button
@@ -131,7 +161,18 @@ function App() {
         </AppBar>
       </Box>
 
-      <header className={classes.aapHeader}>
+      <header className={classes.appHeader}>
+        <FormControl className={classes.addTaskForm}>
+          <TextField
+            fullWidth
+            label="New Task"
+            value={task}
+            onChange={(e) => setTask(e.target.value)}
+          />
+          <Button variant="contained" onClick={handleAddTask} className={classes.addBtn}>
+            <AddIcon />
+          </Button>
+        </FormControl>
         {weeksData.map((data, index) => (
           <div key={index} className={classes.weekContainer}>
             <div className={classes.weekWrapper}>

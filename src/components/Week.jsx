@@ -31,7 +31,18 @@ const useStyles = makeStyles()(() => {
   };
 });
 const Week = ({ data, onCheckDay, weekIndex }) => {
-  const colors = [teal, cyan, lightBlue, indigo, pink, lime];
+  const colors = [
+    teal,
+    cyan,
+    lightBlue,
+    indigo,
+    pink,
+    lime,
+    lightBlue,
+    indigo,
+    pink,
+    lime,
+  ];
   const { classes } = useStyles();
 
   return (
