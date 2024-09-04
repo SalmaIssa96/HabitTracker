@@ -156,7 +156,7 @@ const App = () => {
             </div>
             <Week
               data={data}
-              onCheckDay={(index, taskId, dayIndex) => handleCheckTask(index, taskId, dayIndex)}
+              onCheckDay={(taskId, dayIndex) => handleCheckTask(index, taskId, dayIndex)}
             />
           </div>
         ))
