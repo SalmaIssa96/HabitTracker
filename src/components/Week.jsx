@@ -33,18 +33,7 @@ const useStyles = makeStyles()(() => {
   };
 });
 const Week = ({ data, onCheckDay }) => {
-  const colors = [
-    teal,
-    cyan,
-    lightBlue,
-    indigo,
-    pink,
-    lime,
-    lightBlue,
-    indigo,
-    pink,
-    lime,
-  ];
+  const colors = [teal, cyan, lightBlue, indigo, pink, lime];
   const { classes } = useStyles();
 
   return (
@@ -54,7 +43,7 @@ const Week = ({ data, onCheckDay }) => {
           <li key={task.id} className={classes.taskRow}>
             <Typography
               sx={{
-                color: colors[taskIndex][500],
+                color: colors[taskIndex % colors.length][500],
               }}
             >
               {task.name}
@@ -67,9 +56,9 @@ const Week = ({ data, onCheckDay }) => {
                     checked={day}
                     onChange={() => onCheckDay(task.id, index)}
                     sx={{
-                      color: colors[taskIndex][400],
+                      color: colors[taskIndex % colors.length][400],
                       '&.Mui-checked': {
-                        color: colors[taskIndex][400],
+                        color: colors[taskIndex % colors.length][400],
                       },
                     }}
                   />

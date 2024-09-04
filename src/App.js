@@ -61,7 +61,7 @@ const mainTasksName = ['45 Minute Outdoor Workout', '45 Minute Indoor Workout', 
 const initialWeekData = mainTasksName.map((name, index) => ({ name, id: index + 1, days: [false, false, false, false, false, false, false], }))
 
 
-const users = ['Salma', 'Ibraheem'];
+const users = ['salma', 'ibraheem'];
 
 const App = () => {
   const [user, setUser] = useState('salma');
@@ -96,7 +96,7 @@ const App = () => {
     });
 
     setWeeksData(newData);
-    localStorage.setItem(users[user], JSON.stringify(newData));
+    localStorage.setItem(user, JSON.stringify(newData));
   };
 
   const handleAddTask = () => {
