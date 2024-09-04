@@ -7,11 +7,13 @@ import {
   pink,
   lime,
 } from '@mui/material/colors';
-import '../App.css';
 import { makeStyles } from 'tss-react/mui';
 
 const useStyles = makeStyles()(() => {
   return {
+    listContainer: {
+      padding: 0,
+    },
     taskRow: {
       display: 'flex',
       justifyContent: 'space-between',
@@ -30,7 +32,7 @@ const useStyles = makeStyles()(() => {
     },
   };
 });
-const Week = ({ data, onCheckDay, weekIndex }) => {
+const Week = ({ data, onCheckDay }) => {
   const colors = [
     teal,
     cyan,
@@ -47,7 +49,7 @@ const Week = ({ data, onCheckDay, weekIndex }) => {
 
   return (
     <div>
-      <ul>
+      <ul className={classes.listContainer}>
         {data.map((task, taskIndex) => (
           <li key={task.id} className={classes.taskRow}>
             <Typography
@@ -63,7 +65,7 @@ const Week = ({ data, onCheckDay, weekIndex }) => {
                   <Checkbox
                     type="checkbox"
                     checked={day}
-                    onChange={() => onCheckDay(weekIndex, task.id, index)}
+                    onChange={() => onCheckDay(task.id, index)}
                     sx={{
                       color: colors[taskIndex][400],
                       '&.Mui-checked': {

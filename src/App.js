@@ -1,109 +1,83 @@
 import Week from './components/Week';
-import { AppBar, Box, Button, FormControl, TextField, Toolbar, Typography } from '@mui/material';
+import { AppBar, Button, FormControl, TextField, Toolbar, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { makeStyles } from 'tss-react/mui';
 import AddIcon from '@mui/icons-material/Add';
 
-const useStyles = makeStyles()(() => {
-  return {
-    appHeader: {
-      minHight: '100vh',
-      display: 'flex',
-      flexDirection: "column",
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    navbar: {
-      backgroundColor: 'teal',
-    },
-    weekContainer: {
-      position: 'relative',
+const useStyles = makeStyles()(() =>
+({
+  appHeader: {
+    minHight: '100vh',
+    display: 'flex',
+    flexDirection: "column",
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  navbar: {
+    backgroundColor: 'teal',
+  },
+  weekContainer: {
+    position: 'relative',
 
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginTop: '1rem'
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: '1rem'
 
-    },
-    weekWrapper: {
-      borderLeft: '4px solid black',
-      margin: "1rem ",
-      transform: 'scale(-1)',
-      alignSelf: 'stretch',
-      position: 'relative'
+  },
+  weekWrapper: {
+    borderLeft: '4px solid black',
+    margin: "1rem ",
+    transform: 'scale(-1)',
+    alignSelf: 'stretch',
+    position: 'relative'
 
-    },
-    weekTile: {
-      writingMode: 'vertical-lr'
-    },
-    addTaskForm: {
-      width: '50%',
-      paddingTop: '20px',
-      display: 'flex',
-      flexDirection: 'row',
+  },
+  weekTile: {
+    writingMode: 'vertical-lr'
+  },
+  addTaskForm: {
+    width: '50%',
+    paddingTop: '20px',
+    display: 'flex',
+    flexDirection: 'row',
 
-    },
-    addBtn: {
-      position: 'absolute',
-      right: '0px',
-      height: '-webkit-fill-available',
-      width: '100px',
-      background: 'teal'
-    }
-
+  },
+  addBtn: {
+    position: 'absolute',
+    right: '0px',
+    height: '-webkit-fill-available',
+    width: '100px',
+    background: 'teal'
+  },
+  appTitle: {
+    flexGrow: 1
   }
-});
 
-const initialWeekData = [
-  {
-    id: 1,
-    name: '45 Minute Outdoor Workout',
-    days: [false, false, false, false, false, false, false],
-  },
-  {
-    id: 2,
-    name: '45 Minute Indoor Workout',
-    days: [false, false, false, false, false, false, false],
-  },
-  {
-    id: 3,
-    name: 'Drink 3 liters of water',
-    days: [false, false, false, false, false, false, false],
-  },
-  {
-    id: 4,
-    name: 'Read 10 pages of a book',
-    days: [false, false, false, false, false, false, false],
-  },
-  {
-    id: 5,
-    name: 'Take a progress picture',
-    days: [false, false, false, false, false, false, false],
-  },
-  {
-    id: 6,
-    name: 'Follow a diet',
-    days: [false, false, false, false, false, false, false],
-  },
-];
+})
+);
+
+const mainTasksName = ['45 Minute Outdoor Workout', '45 Minute Indoor Workout', 'Drink 3 liters of water', 'Read 10 pages of a book', 'Follow a diet'];
+const initialWeekData = mainTasksName.map((name, index) => ({ name, id: index + 1, days: [false, false, false, false, false, false, false], }))
+
 
 const users = ['Salma', 'Ibraheem'];
 
-function App() {
-  const [value, setValue] = useState(0);
-  const [weeksData, setWeeksData] = useState(Array.from({ length: 11 }, () => initialWeekData));
+const App = () => {
+  const [user, setUser] = useState('salma');
+  const [weeksData, setWeeksData] = useState([]);
   const [task, setTask] = useState('')
   const { classes } = useStyles();
 
 
   useEffect(() => {
-    const dataLS = localStorage.getItem(users[value]);
+    const dataLS = localStorage.getItem(user);
     if (dataLS) {
       setWeeksData(JSON.parse(dataLS));
     } else {
       setWeeksData(Array.from({ length: 11 }, () => initialWeekData))
     }
-  }, [value]);
+  }, [user]);
 
   const handleCheckTask = (weekIndex, taskId, dayIndex) => {
     const newData = weeksData.map((week, index) => {
@@ -122,7 +96,7 @@ function App() {
     });
 
     setWeeksData(newData);
-    localStorage.setItem(users[value], JSON.stringify(newData));
+    localStorage.setItem(users[user], JSON.stringify(newData));
   };
 
   const handleAddTask = () => {
@@ -137,29 +111,29 @@ function App() {
     const newData = weeksData.map(week => [...week, newTask]);
 
     setWeeksData(newData);
-    localStorage.setItem(users[value], JSON.stringify(newData));
+    localStorage.setItem(users[user], JSON.stringify(newData));
     setTask('');
   };
   return (
     <div >
-      <Box sx={{ flexGrow: 1 }}>
+      <div >
         <AppBar position="static">
           <Toolbar className={classes.navbar}>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            <Typography variant="h6" className={classes.appTitle}>
               Habit Tracker
             </Typography>
-            {users.map((user, index) => (
+            {users.map((user) => (
               <Button
                 key={user}
                 color="inherit"
-                onClick={() => setValue(index)}
+                onClick={() => setUser(user)}
               >
                 {user}
               </Button>
             ))}
           </Toolbar>
         </AppBar>
-      </Box>
+      </div>
 
       <header className={classes.appHeader}>
         <FormControl className={classes.addTaskForm}>
@@ -176,14 +150,13 @@ function App() {
         {weeksData.map((data, index) => (
           <div key={index} className={classes.weekContainer}>
             <div className={classes.weekWrapper}>
-              <Typography variant="h5" component="h4" className={classes.weekTile}>
+              <Typography variant="h5" className={classes.weekTile}>
                 Week {index + 1}
               </Typography>
             </div>
             <Week
-              weekIndex={index}
               data={data}
-              onCheckDay={handleCheckTask}
+              onCheckDay={(index, taskId, dayIndex) => handleCheckTask(index, taskId, dayIndex)}
             />
           </div>
         ))
